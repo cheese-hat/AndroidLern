@@ -20,7 +20,7 @@ public class Program {
         int quantityPoints = in.readInt(); //количество линий
         ArrayList<Point> points = new ArrayList<Point>(); // массив точек
 
-        for (int i = 0; i < quantityPoints; i ++) { // повторить для каждой строки с данными для линии
+        for (int i = 0; i < quantityPoints; i ++) { // повторить для каждой строки с данными для точки
 
             String coordinatesOnePoint = in.readLine(); // строка с координатами точки от пользователя
             String[] strCoordinates = coordinatesOnePoint.split(" "); // массив цифр пользователя в строковом типе
