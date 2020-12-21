@@ -1,6 +1,5 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -54,75 +53,25 @@ public class Main {
         switch (choiceMenu) {
             case 1:
                 continueOrMenu(BP, 1, magazineItems);
-//                System.out.println("----МАГАЗИН----");
-//                for (int magItem = 0; magItem < magazineItems.length; magItem++) {
-//                    System.out.println(Integer.toString(magItem) + ". " + magazineItems[magItem].name +
-//                            " вес=[" + magazineItems[magItem].weight +
-//                            "] объем=[" + magazineItems[magItem].volume +
-//                            "] тип=" + magazineItems[magItem].type);
-//                }
-//                System.out.println("Для того, чтобы вернуться на страницу меню нажмите 9, продолжить 5: ");
-//                int menuOrContinue = in.nextInt();
-//                if (menuOrContinue == 9) {
-//                    menu(BP);
-//                } else if (menuOrContinue == 5) {
-//
-//                    System.out.println("---------------");
-//                    System.out.println("Выберите номер предмета: ");
-//                    int indMagItem = in.nextInt();
-//                    BP.addItem(magazineItems[indMagItem]);
-//                    continueOrExit(BP);
-//                } else {
-//                    break;
-//                }
-
 
             case 2:
                 continueOrMenu(BP, 2, magazineItems);
-//                System.out.println("Для того, чтобы вернуться на страницу меню нажмите 9, продолжить 5: ");
-//                menuOrContinue = in.nextInt();
-//                if (menuOrContinue == 9) {
-//                    menu(BP);
-//                } else if (menuOrContinue == 5) {
-//                    if (BP.itemsInBackpack()) {
-//                        System.out.println("Выберите номер предмета, который хотите выкинуть из рюкзака: ");
-//                        int indItemToDel = in.nextInt();
-//                        BP.delItem(BP.items.get(indItemToDel));
-//                    } else {
-//                        System.out.println("Рюкзак пуст!");
-//                    }
-//                    continueOrExit(BP);
-//                }
+
             case 3:
                 continueOrMenu(BP, 3, magazineItems);
-//                System.out.println("Для того, чтобы вернуться на страницу меню нажмите 9, продолжить 5: ");
-//                menuOrContinue = in.nextInt();
-//                if (menuOrContinue == 9) {
-//                    menu(BP);
-//                } else if (menuOrContinue == 5) {
-//                    BP.addPocket(1);
-//                    continueOrExit(BP);
-//                }
+
             case 4:
                 continueOrMenu(BP, 4, magazineItems);
-//                System.out.println("Для того, чтобы вернуться на страницу меню нажмите 9, продолжить 5: ");
-//                menuOrContinue = in.nextInt();
-//                if (menuOrContinue == 9) {
-//                    menu(BP);
-//                } else if (menuOrContinue == 5) {
-//                    BP.delPocket(1);
-//                    continueOrExit(BP);
-//                }
+
             case 0:
-                //continueOrMenu(BP, 0, magazineItems);
                 break;
+
             default:
-                //continueOrMenu(BP, , magazineItems);
                 break;
         }
     }
 
-    public static void continueOrExit(Backpack BP){
+    public static void menuOrExit(Backpack BP){
         Scanner in = new Scanner(System.in);
         System.out.println("Для выхода из программы введите 0, для выхода в меню 9: ");
         int choiceExit = in.nextInt();
@@ -146,15 +95,15 @@ public class Main {
                     System.out.println("----МАГАЗИН----");
                     for (int magItem = 0; magItem < magazineItems.length; magItem++) {
                         System.out.println(Integer.toString(magItem) + ". " + magazineItems[magItem].name +
-                                " вес=[" + magazineItems[magItem].weight +
-                                "] объем=[" + magazineItems[magItem].volume +
-                                "] тип=" + magazineItems[magItem].type);
+                                            " вес=[" + magazineItems[magItem].weight +
+                                            "] объем=[" + magazineItems[magItem].volume +
+                                            "] тип=" + magazineItems[magItem].type);
                     }
                     System.out.println("---------------");
                     System.out.println("Выберите номер предмета: ");
                     int indMagItem = in.nextInt();
                     BP.addItem(magazineItems[indMagItem]);
-                    continueOrExit(BP);
+                    menuOrExit(BP);
 
                 case 2:
                     if (BP.itemsInBackpack()) {
@@ -164,30 +113,22 @@ public class Main {
                     } else {
                         System.out.println("Рюкзак пуст!");
                     }
-                    continueOrExit(BP);
+                    menuOrExit(BP);
 
                 case 3:
                     BP.addPocket(1);
-                    continueOrExit(BP);
+                    menuOrExit(BP);
 
                 case 4:
                     BP.delPocket(1);
-                    continueOrExit(BP);
+                    menuOrExit(BP);
 
-//                case 0:
-//                    break;
-//
-//                default:
-//                    break;
             }
 
         } else {
             continueOrMenu(BP, choiceMenu, magazineItems);
         }
     }
-
-
-
 }
 
 enum TypeItem {

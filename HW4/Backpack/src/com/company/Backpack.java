@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class Backpack {
     ArrayList<Item> items = new ArrayList<>(); //предметы в рюкзаке
+
     int maxTotalVolume = 100; // Максимальная вместительность рюкзака по объему
     int maxTotalWeight = 50;// Максимальная вместительность рюкзака по весу
     int backpackVolume = maxTotalVolume;
     int backpackWeight = maxTotalWeight;
+
     int qPockets; // Количество карманов на данный момент
 
 
@@ -42,7 +44,8 @@ public class Backpack {
                     }
                 }
 
-                if (countTypeItem == 2 && (item.type != firstTypeAddItem || item.type != secondTypeAddItem)) {
+                // первый и второй тип должны быть разными
+                if (countTypeItem == 2 && (item.type != firstTypeAddItem && item.type != secondTypeAddItem)) {
                     System.out.println("В рюкзаке количество типов лежащих предметов не может быть больше 2!");
                     pass -= 1;
                     break;
@@ -94,20 +97,37 @@ public class Backpack {
         if (qPockets == 0) {
             System.out.println("У вас нет карманов, чтобы можно было их снях!");
         } else {
-            if (items.size() < 10) {
+            int tmpBackpackWeight = backpackWeight - quantity;
+            int tmpBackpackVolume = backpackVolume - quantity * 5;
+
+            int itemsVolume = 0;
+
+            for (int itemVol = 0; itemVol < items.size(); itemVol++) {
+                itemsVolume += items.get(itemVol).volume;
+            }
+
+            int itemsWeight = 0;
+
+            for (int itemW = 0; itemW < items.size(); itemW++) {
+                itemsWeight += items.get(itemW).weight;
+            }
+
+            if (itemsWeight <= tmpBackpackWeight && itemsVolume <= tmpBackpackVolume) {
                 qPockets -= quantity;
                 backpackVolume -= quantity * 5;
                 backpackWeight -= quantity;
                 maxTotalVolume -= quantity * 5;
                 maxTotalWeight -= quantity;
-                System.out.println("Был снят дополнительный карман!");
             } else {
-                System.out.println("В рюкзаке должно быть не больше 10 вещей, чтобы снять карман!");
+                System.out.println("Выньте из рюкзака вещи, прежде чем снимать карман!");
             }
+
         }
     }
 
     public void backpackLoadingStatistics(){
+        // если сначала положить один тип, потом второй, а затем опять ведь первого типа, то в выводе будет информация о первом типе, но не о втором
+
         int sizeOfItems;
         if (items.isEmpty() ) sizeOfItems = 0;
         else sizeOfItems = items.size();
@@ -124,6 +144,7 @@ public class Backpack {
         }
 
         int freeVolume = maxTotalVolume - itemsVolume;
+
         System.out.println("------------------------------------------------------------------------");
         System.out.println("| Свободно ОБЪЕМА в рюкзаке: \t\t\t\t\t\t\t\t|\t" + freeVolume + "\t  |");
 
@@ -135,6 +156,7 @@ public class Backpack {
         }
 
         int freeWeight = maxTotalWeight - itemsWeight;
+
         System.out.println("------------------------------------------------------------------------");
         System.out.println("| Свободно ВЕСА в рюкзаке:  \t\t\t\t\t\t\t\t|\t" + freeWeight + "\t  |");
 
@@ -146,41 +168,51 @@ public class Backpack {
         int volumeItemsFirstType = 0;
         int volumeItemsSecondType = 0;
         String answerVolumeByTypes;
+
         TypeItem firstTypeItem;
         TypeItem secondTypeItem = null;
 
         if (items.isEmpty()) {
             answerVolumeByTypes = "0%";
         } else {
+
             firstTypeItem = items.get(0).type;
 
-            for (int volumeItemOnType = 0; volumeItemOnType < items.size(); volumeItemOnType++){
-                secondTypeItem = items.get(volumeItemOnType).type;
-                if (firstTypeItem == secondTypeItem) {
-                    itemsFirstType.add(items.get(volumeItemOnType));
-
+            for (int m = 0; m < items.size(); m++){
+                TypeItem tmpSecondTypeItem = items.get(m).type;
+                if (firstTypeItem != tmpSecondTypeItem) {
+                    secondTypeItem = items.get(m).type;
                 } else {
+                    continue;
+                }
+            }
+
+            TypeItem tmpItemType;
+
+            for (int volumeItemOnType = 0; volumeItemOnType < items.size(); volumeItemOnType++){
+                tmpItemType = items.get(volumeItemOnType).type;
+                if (tmpItemType == firstTypeItem) {
+                    itemsFirstType.add(items.get(volumeItemOnType));
+                } else if (tmpItemType == secondTypeItem) {
                     itemsSecondType.add(items.get(volumeItemOnType));
-                    secondTypeItem = items.get(volumeItemOnType).type;
                 }
             }
 
 
-            if (firstTypeItem != secondTypeItem) {
+            if (firstTypeItem != secondTypeItem && secondTypeItem != null) {
                 for (Item firstItem : itemsFirstType) {
                     volumeItemsFirstType += firstItem.volume;
                 }
 
                 for (Item secondItem : itemsSecondType) {
                     volumeItemsSecondType += secondItem.volume;
-                    //secondTypeItem = secondItem.type;
                 }
                 int procentVolumeByFirstTypeItem = ((100 * volumeItemsFirstType) / maxTotalVolume);
                 int procentVolumeBySecondTypeItem = ((100 * volumeItemsSecondType) / maxTotalVolume);
                 answerVolumeByTypes = procentVolumeByFirstTypeItem + "% занимает " + firstTypeItem + "; " +
-                        procentVolumeBySecondTypeItem +"% занимает " + secondTypeItem;
+                                      procentVolumeBySecondTypeItem +"% занимает " + secondTypeItem;
             } else {
-                answerVolumeByTypes = ((100 * itemsVolume) / maxTotalVolume)+"% занимает " + secondTypeItem;
+                answerVolumeByTypes = ((100 * itemsVolume) / maxTotalVolume)+"% занимает " + firstTypeItem;
             }
 
         }
@@ -194,27 +226,14 @@ public class Backpack {
         int weightItemsFirstType = 0;
         int weightItemsSecondType = 0;
         String answerWeightByTypes;
-        TypeItem firstTypeItems;
-        TypeItem secondTypeItems = null;
 
         if (items.isEmpty()) {
             answerWeightByTypes = "0%";
         } else {
 
-            firstTypeItems = items.get(0).type;
+            firstTypeItem = items.get(0).type;
 
-            for (int weightItemOnType = 0; weightItemOnType < items.size(); weightItemOnType++){
-                secondTypeItems = items.get(weightItemOnType).type;
-
-                if (firstTypeItems == secondTypeItems) {
-                    itemsFirstType.add(items.get(weightItemOnType));
-
-                } else {
-                    itemsSecondType.add(items.get(weightItemOnType));
-                    secondTypeItems = items.get(weightItemOnType).type;
-                }
-            }
-            if (firstTypeItems != secondTypeItems) {
+            if (firstTypeItem != secondTypeItem && secondTypeItem != null) {
 
                 for (Item firstItem : itemsFirstType) {
                     weightItemsFirstType += firstItem.weight;
@@ -222,20 +241,19 @@ public class Backpack {
 
                 for (Item secondItem : itemsSecondType) {
                     weightItemsSecondType += secondItem.weight;
-                    //secondTypeItem = secondItem.type;
                 }
 
                 int procentWeightByFirstTypeItem = ((100 * weightItemsFirstType) / maxTotalWeight);
                 int procentWeightBySecondTypeItem = ((100 * weightItemsSecondType) / maxTotalWeight);
-                answerWeightByTypes = procentWeightByFirstTypeItem + "% занимает " + firstTypeItems + "; " +
-                        procentWeightBySecondTypeItem +"% занимает " + secondTypeItem;
+                answerWeightByTypes = procentWeightByFirstTypeItem + "% занимает " + firstTypeItem + "; " +
+                                      procentWeightBySecondTypeItem +"% занимает " + secondTypeItem;
             } else {
-                answerWeightByTypes = ((100 * itemsWeight) / maxTotalWeight)+"% занимает " + secondTypeItems;
+                answerWeightByTypes = ((100 * itemsWeight) / maxTotalWeight)+"% занимает " + firstTypeItem;
             }
 
         }
         System.out.println("------------------------------------------------------------------------");
-        System.out.println("| Процент загрузки по МАССЕ c распределением по типам вещей: |\t " + answerWeightByTypes + "%\t  |\n");
+        System.out.println("| Процент загрузки по МАССЕ c распределением по типам вещей: |\t " + answerWeightByTypes + "\t  |\n");
     }
 
     public boolean itemsInBackpack() {
