@@ -35,10 +35,17 @@ public class Program {
 
         for (int k = 0; k < quantityPoints; k++) {
             for (int j = 0; j < quantityPoints - 1; j++){
-                if (points.get(j).x > points.get(j+1).x || points.get(j).y > points.get(j + 1).y) {
-                    Point tmpPointToMove = new Point(points.get(j).x, points.get(j).y);
-                    points.set(j, points.get(j + 1));
-                    points.set(j + 1, tmpPointToMove);
+
+                Point point1 = points.get(j);
+                int sumP1 = point1.x + point1.y;
+                Point point2 = points.get(j + 1);
+                int sumP2 = point2.x + point2.y;
+
+                if (sumP1 > sumP2 && (point1.x > point2.x || point1.y > point2.y) ) {
+                    points.set(j, point2);
+                    points.set(j + 1, point1);
+                } else {
+                    continue;
                 }
             }
         }
