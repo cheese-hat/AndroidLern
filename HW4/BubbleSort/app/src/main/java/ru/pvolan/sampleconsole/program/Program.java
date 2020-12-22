@@ -37,11 +37,12 @@ public class Program {
             for (int j = 0; j < quantityPoints - 1; j++){
 
                 Point point1 = points.get(j);
-                int sumP1 = point1.x + point1.y;
                 Point point2 = points.get(j + 1);
-                int sumP2 = point2.x + point2.y;
 
-                if (sumP1 > sumP2 && (point1.x > point2.x || point1.y > point2.y) ) {
+                double distPoint1 = distancePoints(point1);
+                double distPoint2 = distancePoints(point2);
+
+                if (distPoint1 > distPoint2 ) {
                     points.set(j, point2);
                     points.set(j + 1, point1);
                 } else {
@@ -55,9 +56,19 @@ public class Program {
             String[] alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
                                 "J", "K", "L", "M", "N", "O", "P", "Q", "R",
                                 "S", "T", "U", "V", "W", "X", "Y", "Z"};
-            out.println(alphabet[p] + " " + Integer.toString(points.get(p).x) + " " + Integer.toString(points.get(p).y));
+            Point sortPoint = points.get(p);
+            out.println(alphabet[p] + " " + sortPoint.x + " " + sortPoint.y);
             drawer.drawText(alphabet[p], points.get(p).x, points.get(p).y);
         }
 
+    }
+
+    public static double distancePoints(Point userPoint){
+        Point startPoint = new Point(0,0);
+
+        double dXsquare = (double) Math.pow((userPoint.x - startPoint.x), 2);
+        double dYsquare = (double) Math.pow((userPoint.y - startPoint.y), 2);
+        double distance = (double) Math.sqrt(dYsquare + dXsquare);
+        return distance;
     }
 }
