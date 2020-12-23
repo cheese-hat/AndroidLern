@@ -38,8 +38,10 @@ public class Main {
 
 
 
-        BP.itemsInBackpack();
-        BP.backpackLoadingStatistics();
+//        BP.itemsInBackpack();
+        itemsInBackpack(BP);
+//        BP.backpackLoadingStatistics();
+        backpackLoadingStatistics(BP);
         System.out.println("--------------------МЕНЮ---------------\n" +
                 "1. погрузить в рюкзак вещь из магазина\n" +
                 "2. убрать вещь из рюкзака\n" +
@@ -64,10 +66,12 @@ public class Main {
                 continueOrMenu(BP, 4, magazineItems);
 
             case 0:
-                break;
+                System.exit(0);
 
             default:
-                break;
+                System.out.println("Был введен неверный пункт меню!");
+                menu(BP);
+
         }
     }
 
@@ -92,41 +96,140 @@ public class Main {
         } else if (menuOrContinue == 5) {
             switch (choiceMenu) {
                 case 1:
+                    //погрузить в рюкзак вещь из магазина
+
                     System.out.println("----МАГАЗИН----");
                     for (int magItem = 0; magItem < magazineItems.length; magItem++) {
                         System.out.println(Integer.toString(magItem) + ". " + magazineItems[magItem].name +
-                                            " вес=[" + magazineItems[magItem].weight +
-                                            "] объем=[" + magazineItems[magItem].volume +
-                                            "] тип=" + magazineItems[magItem].type);
+                                                                    " вес=[" + magazineItems[magItem].weight +
+                                                                    "] объем=[" + magazineItems[magItem].volume +
+                                                                    "] тип=" + magazineItems[magItem].type);
                     }
                     System.out.println("---------------");
                     System.out.println("Выберите номер предмета: ");
+
                     int indMagItem = in.nextInt();
-                    BP.addItem(magazineItems[indMagItem]);
+                    Item itemToAdd = magazineItems[indMagItem];
+
+                    TypeItem firstTypeAddItem;
+
+                    if (BP.items.isEmpty() ) firstTypeAddItem = itemToAdd.type;
+                    else firstTypeAddItem = BP.items.get(0).type;
+
+                    TypeItem secondTypeAddItem = null;
+
+                    for (int m = 0; m < BP.items.size(); m++){
+                        secondTypeAddItem = BP.items.get(m).type;
+                        if (firstTypeAddItem != secondTypeAddItem) {
+                            secondTypeAddItem = BP.items.get(m).type;
+                        }
+                    }
+
+                    int pass = 0;
+                    int countTypeItem;
+
+                    while (pass == 0){
+                        countTypeItem = 1;
+
+                        for(int i = 0; i < BP.items.size(); i++) {
+
+                            for (int j = i + 1; j < BP.items.size(); j++) {
+                                if (BP.items.get(i).type != BP.items.get(j).type) {
+                                    countTypeItem += 1;
+                                }
+                            }
+                        }
+
+                        // первый и второй тип должны быть разными
+                        if (countTypeItem >= 2 && (itemToAdd.type != firstTypeAddItem && itemToAdd.type != secondTypeAddItem)) {
+                            System.out.println("В рюкзаке количество типов лежащих предметов не может быть больше 2!");
+                            pass -= 1;
+                            break;
+                        } else {
+                            pass = 0;
+                            if (BP.addItem(itemToAdd) && pass == 0) {
+
+                                if (itemToAdd.volume > BP.backpackVolume || itemToAdd.weight > BP.backpackWeight) {
+                                    System.out.println("Предмет не поместится в рюкзак!");
+                                    pass -= 1;
+                                } else {
+                                    System.out.println(itemToAdd.name + " был(а/о) добавлен(a/о) в рюкзак.");
+                                    pass += 1;
+                                }
+                            }
+                        }
+                    }
+
+                    if (pass < 0) System.out.println("Не получилось добавить предмет в рюкзак :С");
+                    else System.out.println("Предмет был успешно добавлен в рюкзак С:");
+
                     menuOrExit(BP);
 
                 case 2:
-                    if (BP.itemsInBackpack()) {
+                    //убрать вещь из рюкзака
+//                    if (BP.itemsInBackpack()) {
+                    if (itemsInBackpack(BP)) {
                         System.out.println("Выберите номер предмета, который хотите выкинуть из рюкзака: ");
                         int indItemToDel = in.nextInt();
-                        BP.delItem(BP.items.get(indItemToDel));
+                        System.out.println(BP.delItem(BP.items.get(indItemToDel)) + " был(а) жестоко выкинут(а) из рюкзака!");
                     } else {
                         System.out.println("Рюкзак пуст!");
                     }
                     menuOrExit(BP);
 
                 case 3:
-                    BP.addPocket(1);
+                    //навесить дополнительный карман
+                    System.out.println("Был повешен дополнительный карман!");
+                    System.out.println("Количетсво карманов на рюкзаке: " + BP.addPocket(1));
                     menuOrExit(BP);
 
                 case 4:
-                    BP.delPocket(1);
+                    //убрать дополнительный карман
+                    if (BP.qPockets == 0) {
+                        System.out.println("У вас нет карманов, чтобы можно было их снях!");
+                    } else {
+                        if (BP.delPocket(1)){
+                            System.out.println("Был снят карман с рюкзака!");
+                            System.out.println("Количетсво карманов на рюкзаке: " + BP.qPockets);
+                        } else {
+                            System.out.println("Выньте из рюкзака вещи, прежде чем снимать карман!");
+                        }
+                    }
                     menuOrExit(BP);
+
+                default:
+                    System.out.println("Вы ввели неверный пункт меню!");
 
             }
 
         } else {
             continueOrMenu(BP, choiceMenu, magazineItems);
+        }
+    }
+
+    public static void backpackLoadingStatistics(Backpack BP) {
+        System.out.println("| Количество вещей в рюкзаке:  \t\t\t\t\t\t\t\t|\t\t" + BP.quantityOfItems() +"\t\t  |");
+        System.out.println("| Свободно ОБЪЕМА в рюкзаке:   \t\t\t\t\t\t\t\t|\t\t" + BP.freeVolume() + "\t\t  |");
+        System.out.println("| Свободно ВЕСА в рюкзаке:     \t\t\t\t\t\t\t\t|\t\t" + BP.freeWeight() + "\t\t  |");
+        System.out.println("| Общий процент загрузки по ОБЪЕМУ:  \t\t\t\t\t\t|\t\t" + BP.totalVolumePercentage() + "%\t\t  |");
+        System.out.println("| Общий процент загрузки по МАССЕ:   \t\t\t\t\t\t|\t\t" + BP.totalWeightPercentage() + "%\t\t  |");
+        System.out.println("| Процент загрузки по ОБЪЕМУ c распределением по типам вещей: |\t\t" + BP.percentageOfVolumeByType() + "\t\t  |");
+        System.out.println("| Процент загрузки по МАССЕ c распределением по типам вещей:  |\t\t" + BP.percentageOfWeightByType() + "\t\t  |\n");
+    }
+
+    public static boolean itemsInBackpack(Backpack BP) {
+        if (BP.items.isEmpty()) {
+            System.out.println("\n-------------------");
+            System.out.println("|   Рюкзак пуст!  |");
+            System.out.println("-------------------\n");
+            return false;
+        } else {
+            System.out.println("\n----------------СОДЕРЖИМОЕ РЮКЗАКА----------------");
+            for (int bpItem = 0; bpItem < BP.items.size(); bpItem++) {
+                System.out.println(Integer.toString(bpItem) + ". " + BP.items.get(bpItem).name);
+            }
+            System.out.println("---------------------------------------------------\n");
+            return true;
         }
     }
 }
