@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/editInput"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top|left"
+        android:hint="Input here. Don't forget trailing \'\\n\'."
+        />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/buttonRun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Run"/>
+
+            <ProgressBar
+                android:id="@+id/progressRun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/buttonCanvasOutput"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="CNV"/>
+
+
+        <Button
+            android:id="@+id/buttonTextOutput"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="TXT"/>
+
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:id="@+id/layoutTextOutput"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/textOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </ScrollView>
+
+
+    <ru.pvolan.sampleconsole.CanvasView
+        android:id="@+id/imageOutput"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:visibility="gone"/>
+
+</LinearLayout>
