@@ -16,10 +16,10 @@ public class Woodpecker {
         return currentPosition.getY();
     }
 
-    public void eatABug(TreeNode node) {
+    public void eatABug() {
 
-        if (node.getBugsCount() != 0) {
-            node.delBug(node);
+        if (currentPosition.getBugsCount() != 0) {
+            currentPosition.delBug(currentPosition);
             bugsEatenCount += 1;
         }
     }

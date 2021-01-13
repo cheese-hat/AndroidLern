@@ -54,6 +54,8 @@ public class Program extends ProgramBase {
 
         TreeNode leftLeft = left.getLeftSubTree();
         leftLeft.setBugsCount(8);
+        leftLeft.getLeftSubTree().setBugsCount(7);
+        leftLeft.getRightSubTree().setBugsCount(1);
 
         TreeNode right = root.getRightSubTree();
         right.setBugsCount(6);
@@ -63,15 +65,19 @@ public class Program extends ProgramBase {
         TreeNode rightRight = right.setRightSubTree();
         right.generateRightSide(rightRight, 3);
         rightRight.setBugsCount(4);
+        rightRight.getLeftSubTree().setBugsCount(9);
 
         TreeNode rightRightRight = rightRight.setRightSubTree();
+        rightRight.generateRightSide(rightRightRight, 3);
         rightRightRight.setBugsCount(5);
-
-        rightRight.generateLeftSide(rightRightRight, 3);
+        rightRightRight.getLeftSubTree().setBugsCount(1);
+        rightRightRight.getRightSubTree().setBugsCount(8);
 
         TreeNode rightLeftLeft = rightLeft.setLeftSubTree();
         rightLeft.generateLeftSide(rightLeftLeft, 3);
         rightLeftLeft.setBugsCount(9);
+        rightLeftLeft.getRightSubTree().setBugsCount(3);
+        rightLeftLeft.getLeftSubTree().setBugsCount(4);
 
 
         woodpecker = new Woodpecker();
@@ -145,7 +151,7 @@ public class Program extends ProgramBase {
     public void onButtonAClick() {
         //This method is called when button "A" is clicked.
         //Same rules as for onCommandRun() method are applied
-        woodpecker.eatABug(woodpecker.getCurrentPosition());
+        woodpecker.eatABug();
         redraw();
     }
 
@@ -153,7 +159,7 @@ public class Program extends ProgramBase {
     public void onButtonBClick() {
         //This method is called when button "B" is clicked.
         //Same rules as for onCommandRun() method are applied
-        woodpecker.eatABug(woodpecker.getCurrentPosition());
+        woodpecker.eatABug();
         redraw();
     }
 
@@ -242,7 +248,7 @@ public class Program extends ProgramBase {
                 canvas.drawLine(root.getX(), root.getY(), right.getX(), right.getY(), linePaint);
             }
         } else {
-            treePaint.setColor(Color.rgb(0, 150, 0));
+            treePaint.setColor(Color.rgb(129, 178, 127)); //81b27f (129,178,127)
             canvas.drawCircle(root.getX(), root.getY(), 40, treePaint);
             drawBugs(canvas, root, bugsPaint);
         }
