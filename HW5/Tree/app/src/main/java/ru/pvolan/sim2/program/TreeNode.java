@@ -20,46 +20,17 @@ public class TreeNode {
 
 
     public void setBugsCount(int count){
-        this.bugsCount += count;
+
+        this.bugsCount = count;
     }
 
     public int getBugsCount() {
         return bugsCount;
     }
 
-    public TreeNode setLeftSubTree(){
-
-        this.leftSubTree = new TreeNode();
-        this.leftSubTree.x = this.x - 100;
-        this.leftSubTree.y = this.y + 100;
-        return leftSubTree;
-    }
-
-    public TreeNode setRightSubTree(){
-
-        this.rightSubTree = new TreeNode();
-        this.rightSubTree.x = this.x + 100;
-        this.rightSubTree.y = this.y + 100;
-        return rightSubTree;
-    }
-
     public void setTwoSubTree(){
         this.setLeftSubTree();
         this.setRightSubTree();
-    }
-
-    public void notSetSubTrees(){
-        this.leftSubTree = null;
-        this.rightSubTree = null;
-    }
-
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
 
@@ -72,11 +43,19 @@ public class TreeNode {
     }
 
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     // woodpecker ate a bug
+
     public void delBug(TreeNode node){
         bugsCount = node.bugsCount - 1;
     }
-
     public static boolean isBinary(TreeNode node){
         if (node.rightSubTree!= null || node.leftSubTree != null) return true;
         else return false;
@@ -93,6 +72,22 @@ public class TreeNode {
     public static boolean hasRightSubTree(TreeNode node){
         if (node.rightSubTree!= null) return true;
         else return false;
+    }
+
+    public TreeNode setLeftSubTree(){
+
+        this.leftSubTree = new TreeNode();
+        this.leftSubTree.x = this.x - 100;
+        this.leftSubTree.y = this.y + 100;
+        return leftSubTree;
+    }
+
+    public TreeNode setRightSubTree(){
+
+        this.rightSubTree = new TreeNode();
+        this.rightSubTree.x = this.x + 100;
+        this.rightSubTree.y = this.y + 100;
+        return rightSubTree;
     }
 
     public void generateRightSide(TreeNode right, int level){
@@ -117,7 +112,5 @@ public class TreeNode {
         TreeNode leftLeft = left.setLeftSubTree();
         leftLeft.x = left.x - step;
     }
-
-
-
+    
 }
